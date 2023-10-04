@@ -1,5 +1,6 @@
 using MailKit.Net.Smtp;
 using MimeKit;
+using static EmailClient.Common.Methods;
 
 namespace EmailClient
 {
@@ -33,8 +34,13 @@ namespace EmailClient
             emailMessage.Body = new TextPart("plain") { Text = message };
 
             var client = new SmtpClient();
+            if (GemEmailType(fromEmail) == "gmail.com")
+            {
+                client.Connect("smtp.gmail.com", 465, true);
+            }
 
-            client.Connect("smtp.gmail.com", 465, true);
+            //add other types
+
             client.Authenticate(fromEmail, password);
             client.Send(emailMessage);
             client.Disconnect(true);
