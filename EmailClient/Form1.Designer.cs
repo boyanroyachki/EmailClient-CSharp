@@ -72,7 +72,7 @@
             // userPassword
             // 
             userPassword.AutoSize = true;
-            userPassword.Location = new Point(39, 172);
+            userPassword.Location = new Point(39, 149);
             userPassword.Name = "userPassword";
             userPassword.Size = new Size(73, 20);
             userPassword.TabIndex = 3;
@@ -81,7 +81,7 @@
             // UserPasswordInput
             // 
             UserPasswordInput.BackColor = Color.DimGray;
-            UserPasswordInput.Location = new Point(39, 215);
+            UserPasswordInput.Location = new Point(39, 192);
             UserPasswordInput.Name = "UserPasswordInput";
             UserPasswordInput.Size = new Size(273, 27);
             UserPasswordInput.TabIndex = 4;
@@ -90,7 +90,7 @@
             // toAdress
             // 
             toAdress.AutoSize = true;
-            toAdress.Location = new Point(39, 274);
+            toAdress.Location = new Point(39, 222);
             toAdress.Name = "toAdress";
             toAdress.Size = new Size(28, 20);
             toAdress.TabIndex = 5;
@@ -99,7 +99,7 @@
             // RecieverEmailInput
             // 
             RecieverEmailInput.BackColor = Color.DimGray;
-            RecieverEmailInput.Location = new Point(39, 314);
+            RecieverEmailInput.Location = new Point(39, 260);
             RecieverEmailInput.Name = "RecieverEmailInput";
             RecieverEmailInput.Size = new Size(273, 27);
             RecieverEmailInput.TabIndex = 6;
@@ -134,7 +134,7 @@
             // 
             // sendButton
             // 
-            sendButton.ForeColor = Color.IndianRed;
+            sendButton.ForeColor = Color.Black;
             sendButton.Location = new Point(459, 368);
             sendButton.Name = "sendButton";
             sendButton.Size = new Size(78, 54);
@@ -157,7 +157,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ButtonShadow;
+            BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(800, 450);
             Controls.Add(richTextBox1);
             Controls.Add(sendButton);
@@ -171,7 +171,7 @@
             Controls.Add(UserEmailInput);
             Controls.Add(userMail);
             Controls.Add(Title);
-            ForeColor = SystemColors.Control;
+            ForeColor = SystemColors.ActiveCaptionText;
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);

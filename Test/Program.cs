@@ -2,47 +2,72 @@
 using MailKit.Net.Smtp;
 using static EmailClient.Common.Methods;
 
-Console.WriteLine("███████╗███╗░░░███╗░█████╗░██╗██╗░░░░░  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗");
-Console.WriteLine("██╔════╝████╗░████║██╔══██╗██║██║░░░░░  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝");
-Console.WriteLine("█████╗░░██╔████╔██║███████║██║██║░░░░░  ██║░░╚═╝██║░░░░░██║█████╗░░██╔██╗██║░░░██║░░░");
-Console.WriteLine("██╔══╝░░██║╚██╔╝██║██╔══██║██║██║░░░░░  ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░");
-Console.WriteLine("███████╗██║░╚═╝░██║██║░░██║██║███████╗  ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░");
-Console.WriteLine("╚══════╝╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝╚══════╝  ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░");
-
-Console.Write("Type your email adress here: ");
-string emailFrom = Console.ReadLine();
-
-Console.Write("Type your password here: ");
-string password = Console.ReadLine();
-
-Console.Write("Email to: ");
-string emailTo = Console.ReadLine();
-
-Console.Write("Type the topic of the message: ");
-string topic = Console.ReadLine();
-
-Console.Write("Write you message: ");
-string message = Console.ReadLine();
-
-try
+while (true)
 {
-    SendEmail(emailFrom, password, emailTo, topic, message);
-    Console.WriteLine("░░░░░░░██████╗███████╗███╗░░██╗██████╗░░░░░░░");
-    Console.WriteLine("░░░░░░██╔════╝██╔════╝████╗░██║██╔══██╗░░░░░░");
-    Console.WriteLine("█████╗╚█████╗░█████╗░░██╔██╗██║██║░░██║█████╗");
-    Console.WriteLine("╚════╝░╚═══██╗██╔══╝░░██║╚████║██║░░██║╚════╝");
-    Console.WriteLine("░░░░░░██████╔╝███████╗██║░╚███║██████╔╝░░░░░░");
-    Console.WriteLine("░░░░░░╚═════╝░╚══════╝╚═╝░░╚══╝╚═════╝░░░░░░░");
-}
-catch (Exception ex)
-{
-    Console.WriteLine("███████╗██████╗░██████╗░░█████╗░██████╗░██╗");
-    Console.WriteLine("██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗╚═╝");
-    Console.WriteLine("█████╗░░██████╔╝██████╔╝██║░░██║██████╔╝░░░");
-    Console.WriteLine("██╔══╝░░██╔══██╗██╔══██╗██║░░██║██╔══██╗░░░");
-    Console.WriteLine("███████╗██║░░██║██║░░██║╚█████╔╝██║░░██║██╗");
-    Console.WriteLine("╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚═╝");
-    Console.WriteLine($"Failed to send email. Reason: {ex.Message}");
+    Console.WriteLine("███████╗███╗░░░███╗░█████╗░██╗██╗░░░░░  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗");
+    Console.WriteLine("██╔════╝████╗░████║██╔══██╗██║██║░░░░░  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝");
+    Console.WriteLine("█████╗░░██╔████╔██║███████║██║██║░░░░░  ██║░░╚═╝██║░░░░░██║█████╗░░██╔██╗██║░░░██║░░░");
+    Console.WriteLine("██╔══╝░░██║╚██╔╝██║██╔══██║██║██║░░░░░  ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░");
+    Console.WriteLine("███████╗██║░╚═╝░██║██║░░██║██║███████╗  ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░");
+    Console.WriteLine("╚══════╝╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝╚══════╝  ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░");
+
+    Console.Write("Type your email adress here: ");
+    string emailFrom = Console.ReadLine();
+
+    Console.Write("Type your password here: ");
+    string password = Console.ReadLine();
+
+    Console.Write("Email to: ");
+    string emailTo = Console.ReadLine();
+
+    Console.Write("Type the topic of the message: ");
+    string topic = Console.ReadLine();
+
+    Console.Write("Write you message: ");
+    string message = Console.ReadLine();
+
+    try
+    {
+        SendEmail(emailFrom, password, emailTo, topic, message);
+        Console.WriteLine("░░░░░░░██████╗███████╗███╗░░██╗██████╗░░░░░░░");
+        Console.WriteLine("░░░░░░██╔════╝██╔════╝████╗░██║██╔══██╗░░░░░░");
+        Console.WriteLine("█████╗╚█████╗░█████╗░░██╔██╗██║██║░░██║█████╗");
+        Console.WriteLine("╚════╝░╚═══██╗██╔══╝░░██║╚████║██║░░██║╚════╝");
+        Console.WriteLine("░░░░░░██████╔╝███████╗██║░╚███║██████╔╝░░░░░░");
+        Console.WriteLine("░░░░░░╚═════╝░╚══════╝╚═╝░░╚══╝╚═════╝░░░░░░░");
+       
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("███████╗██████╗░██████╗░░█████╗░██████╗░██╗");
+        Console.WriteLine("██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗╚═╝");
+        Console.WriteLine("█████╗░░██████╔╝██████╔╝██║░░██║██████╔╝░░░");
+        Console.WriteLine("██╔══╝░░██╔══██╗██╔══██╗██║░░██║██╔══██╗░░░");
+        Console.WriteLine("███████╗██║░░██║██║░░██║╚█████╔╝██║░░██║██╗");
+        Console.WriteLine("╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚═╝");
+        Console.WriteLine($"Failed to send email. Reason: {ex.Message}");
+    }
+
+    Console.WriteLine();
+    Console.Write("Send another mail? y/n: ");
+    string answer = Console.ReadLine();
+
+    if (answer == "y")
+    {
+        Console.Clear();
+    }
+    else
+    {
+        Console.WriteLine("████████╗░█████╗░██╗░░██╗███████╗  ░█████╗░░█████╗░██████╗░███████╗██╗");
+        Console.WriteLine("╚══██╔══╝██╔══██╗██║░██╔╝██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔════╝██║");
+        Console.WriteLine("░░░██║░░░███████║█████═╝░█████╗░░  ██║░░╚═╝███████║██████╔╝█████╗░░██║");
+        Console.WriteLine("░░░██║░░░██╔══██║██╔═██╗░██╔══╝░░  ██║░░██╗██╔══██║██╔══██╗██╔══╝░░╚═╝");
+        Console.WriteLine("░░░██║░░░██║░░██║██║░╚██╗███████╗  ╚█████╔╝██║░░██║██║░░██║███████╗██╗");
+        Console.WriteLine("░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝  ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝");
+        Console.WriteLine();
+        Console.WriteLine();
+        break;
+    }
 }
 
 
