@@ -13,12 +13,27 @@ while (true)
 
     Console.Write("Type your email adress here: ");
     string emailFrom = Console.ReadLine();
+    if (String.IsNullOrEmpty(emailFrom) || String.IsNullOrWhiteSpace(emailFrom))
+    {
+        Console.WriteLine("Invalid email input!");
+        break;
+    }
 
     Console.Write("Type your password here: ");
     string password = Console.ReadLine();
+    if (String.IsNullOrEmpty(password) || String.IsNullOrWhiteSpace(password))
+    {
+        Console.WriteLine("Invalid email password!");
+        break;
+    }
 
     Console.Write("Email to: ");
     string emailTo = Console.ReadLine();
+    if (String.IsNullOrEmpty(emailTo) || String.IsNullOrWhiteSpace(emailTo)) 
+    {
+        Console.WriteLine("Invalid recipient input!");
+        break;
+    }
 
     Console.Write("Type the topic of the message: ");
     string topic = Console.ReadLine();
@@ -35,7 +50,7 @@ while (true)
         Console.WriteLine("╚════╝░╚═══██╗██╔══╝░░██║╚████║██║░░██║╚════╝");
         Console.WriteLine("░░░░░░██████╔╝███████╗██║░╚███║██████╔╝░░░░░░");
         Console.WriteLine("░░░░░░╚═════╝░╚══════╝╚═╝░░╚══╝╚═════╝░░░░░░░");
-       
+
     }
     catch (Exception ex)
     {
