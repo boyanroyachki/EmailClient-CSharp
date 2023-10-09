@@ -1,15 +1,12 @@
-﻿using MimeKit;
+﻿using MailKit.Net.Imap;
 using MailKit.Net.Smtp;
+using MimeKit;
+using static EmailClient.Common.AsciiMessages;
 using static EmailClient.Common.Methods;
 
 while (true)
 {
-    Console.WriteLine("███████╗███╗░░░███╗░█████╗░██╗██╗░░░░░  ░█████╗░██╗░░░░░██╗███████╗███╗░░██╗████████╗");
-    Console.WriteLine("██╔════╝████╗░████║██╔══██╗██║██║░░░░░  ██╔══██╗██║░░░░░██║██╔════╝████╗░██║╚══██╔══╝");
-    Console.WriteLine("█████╗░░██╔████╔██║███████║██║██║░░░░░  ██║░░╚═╝██║░░░░░██║█████╗░░██╔██╗██║░░░██║░░░");
-    Console.WriteLine("██╔══╝░░██║╚██╔╝██║██╔══██║██║██║░░░░░  ██║░░██╗██║░░░░░██║██╔══╝░░██║╚████║░░░██║░░░");
-    Console.WriteLine("███████╗██║░╚═╝░██║██║░░██║██║███████╗  ╚█████╔╝███████╗██║███████╗██║░╚███║░░░██║░░░");
-    Console.WriteLine("╚══════╝╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝╚══════╝  ░╚════╝░╚══════╝╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░");
+    WelcomeMessage();
 
     Console.Write("Type your email adress here: ");
     string emailFrom = Console.ReadLine();
@@ -20,51 +17,92 @@ while (true)
     }
 
     Console.Write("Type your password here: ");
+
     string password = Console.ReadLine();
+    //SecureString password = GetPassword();
+
     if (String.IsNullOrEmpty(password) || String.IsNullOrWhiteSpace(password))
     {
         Console.WriteLine("Invalid email password!");
         break;
     }
 
-    Console.Write("Email to: ");
-    string emailTo = Console.ReadLine();
-    if (String.IsNullOrEmpty(emailTo) || String.IsNullOrWhiteSpace(emailTo)) 
+
+    Console.WriteLine("Choose an option:");
+    Console.WriteLine("Send email: [1]");
+    Console.WriteLine("Check inbox: [2]");
+    Console.Write("Type here: ");
+    string command = Console.ReadLine();
+    if (command == "1")
     {
-        Console.WriteLine("Invalid recipient input!");
-        break;
+        Console.Write("Email to: ");
+        string emailTo = Console.ReadLine();
+        if (String.IsNullOrEmpty(emailTo) || String.IsNullOrWhiteSpace(emailTo))
+        {
+            Console.WriteLine("Invalid recipient input!");
+            break;
+        }
+
+        Console.Write("Type the topic of the message: ");
+        string topic = Console.ReadLine();
+
+        Console.Write("Write you message: ");
+        string message = Console.ReadLine();
+
+        try
+        {
+            SendEmail(emailFrom, password, emailTo, topic, message);
+            //send
+            SendMessageText();
+
+        }
+        catch (Exception ex)
+        {
+            ErrorMessageText();
+            Console.WriteLine($"Failed to send email. Reason: {ex.Message}");
+        }
     }
-
-    Console.Write("Type the topic of the message: ");
-    string topic = Console.ReadLine();
-
-    Console.Write("Write you message: ");
-    string message = Console.ReadLine();
-
-    try
+    if (command == "2")
     {
-        SendEmail(emailFrom, password, emailTo, topic, message);
-        Console.WriteLine("░░░░░░░██████╗███████╗███╗░░██╗██████╗░░░░░░░");
-        Console.WriteLine("░░░░░░██╔════╝██╔════╝████╗░██║██╔══██╗░░░░░░");
-        Console.WriteLine("█████╗╚█████╗░█████╗░░██╔██╗██║██║░░██║█████╗");
-        Console.WriteLine("╚════╝░╚═══██╗██╔══╝░░██║╚████║██║░░██║╚════╝");
-        Console.WriteLine("░░░░░░██████╔╝███████╗██║░╚███║██████╔╝░░░░░░");
-        Console.WriteLine("░░░░░░╚═════╝░╚══════╝╚═╝░░╚══╝╚═════╝░░░░░░░");
+        using (var client = new ImapClient())
+        {
+            try
+            {
+                client.Connect("imap.gmail.com", 993, true);  //secure
 
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("███████╗██████╗░██████╗░░█████╗░██████╗░██╗");
-        Console.WriteLine("██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗╚═╝");
-        Console.WriteLine("█████╗░░██████╔╝██████╔╝██║░░██║██████╔╝░░░");
-        Console.WriteLine("██╔══╝░░██╔══██╗██╔══██╗██║░░██║██╔══██╗░░░");
-        Console.WriteLine("███████╗██║░░██║██║░░██║╚█████╔╝██║░░██║██╗");
-        Console.WriteLine("╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚═╝");
-        Console.WriteLine($"Failed to send email. Reason: {ex.Message}");
+                // Note: since we don't have an OAuth2 token, disable
+                // the XOAUTH2 authentication mechanism.
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+
+                client.Authenticate(emailFrom, password);
+
+                // Get the inbox folder and open it.
+                var inbox = client.Inbox;
+                inbox.Open(MailKit.FolderAccess.ReadOnly);
+
+                Console.WriteLine($"Total messages: {inbox.Count}");
+                Console.WriteLine($"Recent messages: {inbox.Recent}");
+
+                // Fetch the recent messages. Let's say the last 10:
+                for (int i = inbox.Count - 1; i >= inbox.Count - 10 && i >= 0; i--)
+                {
+                    var message = inbox.GetMessage(i);
+                    Console.WriteLine($"Subject: {message.Subject}, From: {message.From}");
+                    Console.WriteLine();
+                }
+
+                client.Disconnect(true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error accured while opening your inbox. Reason: {ex.Message}");
+            }
+
+        }
     }
 
     Console.WriteLine();
-    Console.Write("Send another mail? y/n: ");
+    Console.Write("Use the email client again? y/n: ");
     string answer = Console.ReadLine();
 
     if (answer == "y")
@@ -73,18 +111,11 @@ while (true)
     }
     else
     {
-        Console.WriteLine("████████╗░█████╗░██╗░░██╗███████╗  ░█████╗░░█████╗░██████╗░███████╗██╗");
-        Console.WriteLine("╚══██╔══╝██╔══██╗██║░██╔╝██╔════╝  ██╔══██╗██╔══██╗██╔══██╗██╔════╝██║");
-        Console.WriteLine("░░░██║░░░███████║█████═╝░█████╗░░  ██║░░╚═╝███████║██████╔╝█████╗░░██║");
-        Console.WriteLine("░░░██║░░░██╔══██║██╔═██╗░██╔══╝░░  ██║░░██╗██╔══██║██╔══██╗██╔══╝░░╚═╝");
-        Console.WriteLine("░░░██║░░░██║░░██║██║░╚██╗███████╗  ╚█████╔╝██║░░██║██║░░██║███████╗██╗");
-        Console.WriteLine("░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝  ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝");
-        Console.WriteLine();
-        Console.WriteLine();
+        EndSessionText();
         break;
     }
-}
 
+}
 
 void SendEmail(string fromEmail, string password, string toEmail, string subject, string message)
 {
@@ -108,6 +139,7 @@ void SendEmail(string fromEmail, string password, string toEmail, string subject
     client.Send(emailMessage);
     client.Disconnect(true);
 }
+
 
 
 
