@@ -20,8 +20,10 @@ while (true)
     }
 
     //
+    Console.ForegroundColor = ConsoleColor.Red;
     Console.Write("Type your password here: ");
     string password = Console.ReadLine();
+    Console.ResetColor();
     //
 
     //SecureString password = GetPassword();
@@ -43,12 +45,13 @@ while (true)
     string command = Console.ReadLine();
     //
 
-    if (command == "1")
+    if (command == "1" || command == "[1]")
     {
         Console.Write("Email to: ");
         string emailTo = Console.ReadLine();
         if (String.IsNullOrEmpty(emailTo) || String.IsNullOrWhiteSpace(emailTo))
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Invalid recipient input!");
             break;
         }
@@ -73,10 +76,12 @@ while (true)
         catch (Exception ex)
         {
             ErrorMessageText();
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Failed to send email. Reason: {ex.Message}");
+            Console.ResetColor();
         }
     }
-    if (command == "2")
+    if (command == "2" || command == "[2]")
     {
         using (var client = new ImapClient())
         {
@@ -109,7 +114,9 @@ while (true)
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"An error accured while opening your inbox. Reason: {ex.Message}");
+                Console.ResetColor();
             }
 
         }
@@ -128,7 +135,6 @@ while (true)
         EndSessionText();
         break;
     }
-
 }
 
 void SendEmail(string fromEmail, string password, string toEmail, string subject, string message)
