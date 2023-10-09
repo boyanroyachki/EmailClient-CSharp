@@ -8,31 +8,41 @@ while (true)
 {
     WelcomeMessage();
 
-    Console.Write("Type your email adress here: ");
+    //
+    Console.Write("Type your email address here: ");
     string emailFrom = Console.ReadLine();
+    //
+
     if (String.IsNullOrEmpty(emailFrom) || String.IsNullOrWhiteSpace(emailFrom))
     {
         Console.WriteLine("Invalid email input!");
         break;
     }
 
+    //
     Console.Write("Type your password here: ");
-
     string password = Console.ReadLine();
-    //SecureString password = GetPassword();
+    //
 
+    //SecureString password = GetPassword();
     if (String.IsNullOrEmpty(password) || String.IsNullOrWhiteSpace(password))
     {
         Console.WriteLine("Invalid email password!");
         break;
     }
 
-
+    Console.WriteLine();
     Console.WriteLine("Choose an option:");
+    Console.WriteLine();
     Console.WriteLine("Send email: [1]");
     Console.WriteLine("Check inbox: [2]");
+
+    //
+    Console.WriteLine();
     Console.Write("Type here: ");
     string command = Console.ReadLine();
+    //
+
     if (command == "1")
     {
         Console.Write("Email to: ");
@@ -43,11 +53,15 @@ while (true)
             break;
         }
 
+        //
         Console.Write("Type the topic of the message: ");
         string topic = Console.ReadLine();
+        //
 
+        //
         Console.Write("Write you message: ");
         string message = Console.ReadLine();
+        //
 
         try
         {

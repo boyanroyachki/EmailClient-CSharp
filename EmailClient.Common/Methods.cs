@@ -53,5 +53,7 @@ namespace EmailClient.Common
                 System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
+
+      
     }
 }
