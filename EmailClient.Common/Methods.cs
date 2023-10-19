@@ -54,6 +54,18 @@ namespace EmailClient.Common
             }
         }
 
+        public static bool IsNullOrWhiteSpaceOrEmpty(string input, string? errorMessage)
+        {
+            if (String.IsNullOrEmpty(input) || String.IsNullOrWhiteSpace(input))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(errorMessage);
+                Console.ResetColor();
+                return true;
+            }
+            return false;
+        }
+
       
     }
 }

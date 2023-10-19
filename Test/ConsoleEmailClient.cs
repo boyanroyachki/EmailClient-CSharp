@@ -12,26 +12,13 @@ while (true)
     Console.Write("Type your email address here: ");
     string emailFrom = Console.ReadLine();
     //
-
-    if (String.IsNullOrEmpty(emailFrom) || String.IsNullOrWhiteSpace(emailFrom))
-    {
-        Console.WriteLine("Invalid email input!");
-        break;
-    }
-
+    if (IsNullOrWhiteSpaceOrEmpty(emailFrom, "Invalid email input!")) break;
     //
-    Console.ForegroundColor = ConsoleColor.Red;
     Console.Write("Type your password here: ");
     string password = Console.ReadLine();
-    Console.ResetColor();
     //
-
     //SecureString password = GetPassword();
-    if (String.IsNullOrEmpty(password) || String.IsNullOrWhiteSpace(password))
-    {
-        Console.WriteLine("Invalid email password!");
-        break;
-    }
+    if (IsNullOrWhiteSpaceOrEmpty(password, "Invalid password Input!")) break;
 
     Console.WriteLine();
     Console.WriteLine("Choose an option:");
@@ -43,18 +30,16 @@ while (true)
     Console.WriteLine();
     Console.Write("Type here: ");
     string command = Console.ReadLine();
+
+    if (IsNullOrWhiteSpaceOrEmpty(command, "Invalid command!")) break;
     //
 
     if (command == "1" || command == "[1]")
     {
         Console.Write("Email to: ");
         string emailTo = Console.ReadLine();
-        if (String.IsNullOrEmpty(emailTo) || String.IsNullOrWhiteSpace(emailTo))
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Invalid recipient input!");
-            break;
-        }
+
+        if (IsNullOrWhiteSpaceOrEmpty(emailTo, "Invalid recipient input!")) break; 
 
         //
         Console.Write("Type the topic of the message: ");
