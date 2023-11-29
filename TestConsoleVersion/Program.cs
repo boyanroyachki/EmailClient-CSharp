@@ -2,13 +2,14 @@
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using System.Security;
 using static EmailClient.Common.AsciiMessages;
 using static EmailClient.Common.Methods;
 
 
-bool loggedIn = false;    //
-string emailFrom = null; // -> variables, needed from the start
-string password = null; //
+bool loggedIn = false;          //
+string emailFrom = null;       // -> variables, needed from the start
+SecureString password = null; //
 
 while (true)
 {
@@ -41,11 +42,6 @@ while (true)
         Console.ResetColor();
         //password = Console.ReadLine();
         password = ReadPassword();
-
-        if (!IsUserInputValid(password, "Invalid email password!"))
-        {
-            break;
-        }
     }
 
     Console.WriteLine();
@@ -82,7 +78,7 @@ while (true)
 
         try
         {
-            SendEmail(emailFrom, password, emailTo, topic, message);
+            SendEmail(emailFrom, ConvertToUnsecureString(password), emailTo, topic, message);
             //send
             SendMessageText();
 
@@ -106,9 +102,9 @@ while (true)
 
                 // Note: since we don't have an OAuth2 token, disable
                 // the XOAUTH2 authentication mechanism.
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                //client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                client.Authenticate(emailFrom, password);
+                client.Authenticate(emailFrom, ConvertToUnsecureString(password));
                 loggedIn = true;
 
                 // Get the inbox folder and open it.
@@ -149,7 +145,7 @@ while (true)
     {
         Console.Clear();
     }
-    else if(answer.ToLower() == "n")
+    else if (answer.ToLower() == "n")
     {
         Console.WriteLine("You will be logged out. Proceed? y/n");
         answer = Console.ReadLine();
@@ -161,7 +157,7 @@ while (true)
             EndSessionText();
             break;
         }
-        else if(answer.ToLower() == "n")
+        else if (answer.ToLower() == "n")
         {
             Console.Clear();
         }
@@ -194,7 +190,7 @@ void SendEmail(string fromEmail, string password, string toEmail, string subject
     client.Disconnect(true);
 }
 
-bool IsUserInputValid(string userInput, string errorMessage) 
+bool IsUserInputValid(string userInput, string errorMessage)
 {
     if (String.IsNullOrEmpty(userInput) || String.IsNullOrWhiteSpace(userInput))
     {
@@ -207,9 +203,34 @@ bool IsUserInputValid(string userInput, string errorMessage)
     return true;
 }
 
-string ReadPassword()
+//string ReadPassword()
+//{
+//    string newPass = "";
+//    while (true)
+//    {
+//        ConsoleKeyInfo key = Console.ReadKey(true);
+//        if (key.Key == ConsoleKey.Enter)
+//        {
+//            break;
+//        }
+//        if (key.Key == ConsoleKey.Backspace && newPass.Length > 0)
+//        {
+//            newPass = newPass[0..^1];
+//            Console.Write("\b \b"); // Erases the last asterisk
+//        }
+//        else if (!char.IsControl(key.KeyChar))
+//        {
+//            newPass += key.KeyChar;
+//            Console.Write("*"); // Or use '\0' if you don't want to show anything
+//        }
+//    }
+//    Console.WriteLine();
+//    return newPass;
+//}
+
+SecureString ReadPassword()
 {
-    string newPass = "";
+    var password = new SecureString();
     while (true)
     {
         ConsoleKeyInfo key = Console.ReadKey(true);
@@ -217,19 +238,36 @@ string ReadPassword()
         {
             break;
         }
-        if (key.Key == ConsoleKey.Backspace && newPass.Length > 0)
+        if (key.Key == ConsoleKey.Backspace && password.Length > 0)
         {
-            newPass = newPass[0..^1];
-            Console.Write("\b \b"); // Erases the last asterisk
+            password.RemoveAt(password.Length - 1);
+            Console.Write("\b \b");
         }
         else if (!char.IsControl(key.KeyChar))
         {
-            newPass += key.KeyChar;
-            Console.Write("*"); // Or use '\0' if you don't want to show anything
+            password.AppendChar(key.KeyChar);
+            Console.Write("*");
         }
     }
     Console.WriteLine();
-    return newPass;
+    return password;
 }
+string ConvertToUnsecureString(SecureString securePassword)
+{
+    if (securePassword == null)
+    {
+        return string.Empty;
+    }
 
+    IntPtr unmanagedString = IntPtr.Zero;
+    try
+    {
+        unmanagedString = System.Runtime.InteropServices.Marshal.SecureStringToGlobalAllocUnicode(securePassword);
+        return System.Runtime.InteropServices.Marshal.PtrToStringUni(unmanagedString);
+    }
+    finally
+    {
+        System.Runtime.InteropServices.Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+    }
+}
 
